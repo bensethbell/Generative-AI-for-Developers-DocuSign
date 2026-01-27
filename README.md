@@ -29,6 +29,10 @@ A hands-on workshop teaching developers how to build applications with Large Lan
 
 5) [AI Ethics and Safety](https://docs.google.com/presentation/d/1mo0IRrU78hI0-vvZs2pJT32MWrZyPAlZ/edit?usp=drive_link&ouid=109036277148056682596&rtpof=true&sd=true)
 
+## Access the Virtual Environment
+
+Add your name to the [sign-up sheet](https://docs.google.com/spreadsheets/d/1HnRHgt5hIfD8lq4J98bZSerfv0o-gNB57PdBA1fAWdk/edit?gid=547734190#gid=547734190) to claim your username, then sign in using the instructions included in the sheet.
+
 ## Quick Start
 
 ```bash
