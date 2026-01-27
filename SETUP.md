@@ -37,25 +37,35 @@ This installs everything needed for:
 - Day 2 AI Agent project
 
 ## Step 3: Configure API Keys
+Get a Groq API key:
+
+- Go to https://console.groq.com/
+- Sign up or log in
+- Go to API Keys section
+- Create a new API key
 
 Create a `.env` file in this directory:
 
 ```
-OPENAI_API_KEY=your_openai_api_key_here
 GROQ_API_KEY=your_groq_api_key_here
 ```
 
 **Where to get keys:**
-- OpenAI: https://platform.openai.com/api-keys
 - Groq (free): https://console.groq.com
 
 ## Step 4: Verify Installation
 
 ```bash
-python -c "import openai; print('OpenAI OK')"
+python -c "import groq; print('Groq OK')"
 python -c "import faiss; print('FAISS OK')"
 python -c "from phi.agent import Agent; print('Phidata OK')"
 ```
+
+## Step 5: Register Jupyter Kernel
+Register the venv as a Jupyter kernel:
+```bash
+pip install ipykernel
+python -m ipykernel install --user --name=genai-workshop
 
 ## What's Covered
 
@@ -81,11 +91,7 @@ You have a conflicting `phi` package:
 pip uninstall phi -y && pip install phidata
 ```
 
-**Jupyter kernel doesn't see packages**
-Register the venv as a Jupyter kernel:
-```bash
-pip install ipykernel
-python -m ipykernel install --user --name=genai-workshop
+
 ```
 Then select "genai-workshop" kernel in Jupyter.
 
