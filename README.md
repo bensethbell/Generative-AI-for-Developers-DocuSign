@@ -72,3 +72,7 @@ See [SETUP.md](SETUP.md) for detailed setup instructions and troubleshooting.
 - **phi (phidata)** - AI agent framework
 - **MCP** - Model Context Protocol for tool integration
 - **Jupyter** - Interactive notebook environment
+
+## Resources
+
+- [Copilot Skills - How Context Is Managed](https://claude.ai/public/artifacts/c1b84eb3-10d9-41df-8204-43ca8516d826)
