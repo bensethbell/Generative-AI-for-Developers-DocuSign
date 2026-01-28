@@ -361,6 +361,8 @@ You'll notice that the chatbot from Part 1 doesn't remember previous messages. E
 - Append each user message and assistant response to the list
 - Pass the full `messages` list to the API each time
 
+**Hint:** The `"assistant"` role in the messages list represents the model's previous replies. By appending both `"user"` and `"assistant"` messages to your list after each exchange, the model can see the full conversation and "remember" what was said.
+
 **Test it:** Tell it your name, then ask "What is my name?" — the chatbot should now remember.
 
 ---
