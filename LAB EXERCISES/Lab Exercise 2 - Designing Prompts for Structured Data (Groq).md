@@ -339,22 +339,103 @@ Designing prompts for structured data is essential for real-world LLM integratio
 - The same prompt engineering principles apply across LLM providers
 - Always validate JSON output before using in production systems
 
-Extras to add
-* Add in interative loop for continuous chat
-* Add in memory to your chatbot
-## Integrate Meta Prompting
+## 15. Extra Credit
 
-Ask your model to become it's own content moderator!
+### Part 1: Build an Interactive Chatbot
 
-1. Design a prompt that asks your model to identify whether or not a prompt or a response contains some sort of harmful content.
-    * We suggest defining a fairly specific kind of "harmful content."
-        * e.g. "copyright infringement"
-        * e.g. "racist language"
-        * e.g. "mature themes not appropriate for children"
-2. Before making any prompts and after generating any responses:
-    * Inject the prompt or content to your meta prompt
-    * Send that to the model
-    * Parse the "yes" or "no" into a boolean
-    * Reject the prompt or response if the model said you should.
+Turn your Groq API call into an interactive chatbot that keeps prompting the user for input in a loop.
 
+**Requirements:**
+- Use a `while` loop to continuously prompt the user for questions
+- The chatbot should respond to each question using the Groq API
+- The loop should exit when the user types `quit` or `exit`
 
+**Starter Code:**
+```python
+import os
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+model = "llama-3.3-70b-versatile"
+
+print("Chatbot ready! Type 'quit' to exit.\n")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() in ["quit", "exit"]:
+        print("Goodbye!")
+        break
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_input}
+        ],
+        temperature=0.7,
+        max_tokens=300
+    )
+    print(f"\nAssistant: {response.choices[0].message.content.strip()}\n")
+```
+
+**Try it out:** Ask it a few questions in a row. Notice anything missing?
+
+---
+
+### Part 2: Add Conversation History
+
+You'll notice that the chatbot from Part 1 doesn't remember previous messages. Each question is treated independently. Fix this by maintaining a list of messages and passing the full conversation history to the API on each call.
+
+**Requirements:**
+- Maintain a `messages` list that starts with the system message
+- Append each user message and assistant response to the list
+- Pass the full `messages` list to the API each time
+
+**Hints:**
+- Initialize your list with `[{"role": "system", "content": "You are a helpful assistant."}]`
+- After the user types something, append `{"role": "user", "content": user_input}` to the list
+- After getting a response, append `{"role": "assistant", "content": assistant_reply}` to the list
+- Pass the entire list as the `messages` parameter in your API call
+
+**Test it:** Ask "My name is Alex", then ask "What is my name?" — the chatbot should now remember.
+
+---
+
+### Part 3: Add Content Moderation
+
+Now make your chatbot its own content moderator using a **meta-prompting** technique. Before processing a user's message (and optionally after generating a response), send the content to the model with a separate moderation prompt to check whether it should be allowed.
+
+**Requirements:**
+1. Write a moderation prompt that asks the model to evaluate whether a piece of text contains harmful content. Be specific about the kind of content you want to flag (pick one or more):
+   - Racist or discriminatory language
+   - Content not appropriate for children
+   - Requests for illegal activity
+   - Copyright infringement attempts
+2. Create a `moderate(text)` function that:
+   - Sends the text to Groq with your moderation prompt
+   - Instructs the model to respond with ONLY `yes` or `no` (yes = harmful)
+   - Parses the response into a boolean
+3. Before sending the user's input to the chatbot:
+   - Run `moderate(user_input)` — if flagged, print a rejection message and skip the API call
+4. **(Bonus)** After generating the assistant's response:
+   - Run `moderate(assistant_reply)` — if flagged, replace the response with a safe fallback message
+
+**Hints:**
+```python
+def moderate(text):
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a content moderator. Respond with ONLY 'yes' or 'no'."},
+            {"role": "user", "content": f"Does the following text contain [YOUR CATEGORY HERE]?\n\n{text}"}
+        ],
+        temperature=0.0,
+        max_tokens=3
+    )
+    result = response.choices[0].message.content.strip().lower()
+    return result == "yes"
+```
+
+**Test it:** Try sending a message that should be flagged and verify the chatbot rejects it.
