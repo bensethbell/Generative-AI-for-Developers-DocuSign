@@ -1,3 +1,5 @@
+**FEEDBACK LINK**: [https://pluralsight.surveymonkey.com/r/TCQJVVJ](https://pluralsight.surveymonkey.com/r/TCQJVVJ)
+
 # Generative AI for Developers Workshop
 
 A hands-on workshop teaching developers how to build applications with Large Language Models (LLMs). Covers prompt engineering, RAG, chatbots, AI agents, and MCP servers using Groq's API and open-source Llama models.
